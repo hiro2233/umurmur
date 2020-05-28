@@ -57,6 +57,9 @@
 #define MAX_TOKENS 32
 #define KEY_LENGTH sizeof(uint16_t) + 4 * sizeof(in_addr_t)
 
+#define DEBUG_LOG 0
+#define HALFDUPLEX_SERVER 0
+
 #define IS_AUTH(_a_) ((_a_)->authenticated)
 
 typedef struct {

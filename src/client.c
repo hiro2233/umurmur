@@ -939,7 +939,21 @@ int Client_voiceMsg(client_t *client, uint8_t *data, int len)
 		list_iterate(itr, &ch->clients) {
 			client_t *c;
 			c = list_get_entry(itr, client_t, chan_node);
-			Client_send_voice(client, c, buffer, pds->offset + 1, poslen);
+
+#if HALFDUPLEX_SERVER == 1
+            if (c->isAdmin) {
+                Client_send_voice(client, c, buffer, pds->offset + 1, poslen);
+            }
+            if (client->isAdmin) {
+                Client_send_voice(client, c, buffer, pds->offset + 1, poslen);
+            }
+#else
+            Client_send_voice(client, c, buffer, pds->offset + 1, poslen);
+#endif
+
+#if DEBUG_LOG == 1
+            Log_info_client(c, "regular channel speech admin: %s Client: %s", client->isAdmin ? "yes" : "no", client->username);
+#endif
 		}
 	} else if ((vt = Voicetarget_get_id(client, target)) != NULL) { /* Targeted whisper */
 		int i;
@@ -948,6 +962,9 @@ int Client_voiceMsg(client_t *client, uint8_t *data, int len)
 		for (i = 0; i < TARGET_MAX_CHANNELS && vt->channels[i].channel != -1; i++) {
 			buffer[0] = (uint8_t) (type | 1);
 			Log_debug("Whisper channel %d", vt->channels[i]);
+#if DEBUG_LOG == 1
+            Log_info_client(client, "Whisper channel: %s", client->isAdmin ? "yes" : "no");
+#endif
 			ch = Chan_fromId(vt->channels[i].channel);
 			if (ch == NULL)
 				continue;
@@ -995,6 +1012,9 @@ int Client_voiceMsg(client_t *client, uint8_t *data, int len)
 			client_t *c;
 			buffer[0] = (uint8_t) (type | 2);
 			Log_debug("Whisper session %d", vt->sessions[i]);
+#if DEBUG_LOG == 1
+            Log_info_client(client, "Whisper session: %s", client->isAdmin ? "yes" : "no");
+#endif
 			while (Client_iterate(&c) != NULL) {
 				if (c->sessionId == vt->sessions[i]) {
 					Client_send_voice(client, c, buffer, pds->offset + 1, poslen);
