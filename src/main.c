@@ -218,9 +218,9 @@ void setscheduler()
 	int rc;
 	struct sched_param sp;
 
-	sp.sched_priority = sched_get_priority_min(SCHED_RR); /* Should suffice */
-	Log_info("Setting SCHED_RR prio %d", sp.sched_priority);
-	rc = sched_setscheduler(0, SCHED_RR, &sp);
+	sp.sched_priority = sched_get_priority_min(SCHED_FIFO); /* Should suffice */
+	Log_info("Setting SCHED_FIFO prio %d", sp.sched_priority);
+	rc = sched_setscheduler(0, SCHED_FIFO, &sp);
 	if (rc < 0)
 		Log_warn("Failed to set scheduler: %s", strerror(errno));
 }
