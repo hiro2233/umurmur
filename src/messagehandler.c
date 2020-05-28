@@ -48,7 +48,6 @@
 
 #define NO_CELT_MESSAGE "<strong>WARNING:</strong> Your client doesn't support the CELT codec, you won't be able to talk to or hear most clients. Please make sure your client was built with CELT support."
 
-
 extern channel_t *defaultChan;
 extern int iCodecAlpha, iCodecBeta;
 extern bool_t bPreferAlpha, bOpus;
@@ -155,18 +154,30 @@ void Mh_handle_message(client_t *client, message_t *msg)
 				goto disconnect;
 			}
 		}
-		if (strlen(getStrConf(PASSPHRASE)) > 0) {
-			if (!msg->payload.authenticate->password ||
-				(msg->payload.authenticate->password &&
-				 strncmp(getStrConf(PASSPHRASE), msg->payload.authenticate->password, MAX_TEXT) != 0)) {
-				char buf[64];
-				sprintf(buf, "Wrong server password");
-				sendServerReject(client, buf, MUMBLE_PROTO__REJECT__REJECT_TYPE__WrongServerPW);
-				Log_debug("Wrong server password: '%s'", msg->payload.authenticate->password != NULL ?
-						  msg->payload.authenticate->password : "(null)");
-				goto disconnect;
-			}
+
+		/* Name */
+		client->username = strdup(msg->payload.authenticate->username);
+
+		if (strlen(getStrConf(ADMIN_PASSPHRASE)) > 0 &&
+            (msg->payload.authenticate->password && strncmp(getStrConf(ADMIN_PASSPHRASE), msg->payload.authenticate->password, MAX_TEXT) == 0)) {
+			client->isAdmin = true;
+			Log_info_client(client, "User provided admin password");
 		}
+
+        if (!client->isAdmin) {
+            if (strlen(getStrConf(PASSPHRASE)) > 0) {
+                if (!msg->payload.authenticate->password ||
+                    (msg->payload.authenticate->password &&
+                     strncmp(getStrConf(PASSPHRASE), msg->payload.authenticate->password, MAX_TEXT) != 0)) {
+                    char buf[64];
+                    sprintf(buf, "Wrong server password1");
+                    sendServerReject(client, buf, MUMBLE_PROTO__REJECT__REJECT_TYPE__WrongServerPW);
+                    Log_debug("Wrong server password2: '%s'", msg->payload.authenticate->password != NULL ?
+                              msg->payload.authenticate->password : "(null)");
+                    goto disconnect;
+                }
+            }
+        }
 		if (strlen(msg->payload.authenticate->username) == 0 ||
 			strlen(msg->payload.authenticate->username) >= MAX_USERNAME) { /* XXX - other invalid names? */
 			char buf[64];
@@ -183,13 +194,10 @@ void Mh_handle_message(client_t *client, message_t *msg)
 			goto disconnect;
 		}
 
-		/* Name */
-		client->username = strdup(msg->payload.authenticate->username);
-
 		/* Tokens */
 		if (msg->payload.authenticate->n_tokens > 0)
 			addTokens(client, msg);
-
+        printf("admin pass: %s passok: %d\n", getStrConf(ADMIN_PASSPHRASE), Client_token_match(client, getStrConf(ADMIN_PASSPHRASE)));
 		/* Check if admin PW among tokens */
 		if (strlen(getStrConf(ADMIN_PASSPHRASE)) > 0 &&
 		    Client_token_match(client, getStrConf(ADMIN_PASSPHRASE))) {
@@ -599,8 +607,22 @@ void Mh_handle_message(client_t *client, message_t *msg)
 						c = list_get_entry(itr, client_t, chan_node);
 						if (c != client && !c->deaf && !c->self_deaf) {
 							Msg_inc_ref(msg);
-							Client_send_message(c, msg);
+
+#if HALFDUPLEX_SERVER == 1
+                            if (c->isAdmin) {
+                                Client_send_message(c, msg);
+                            }
+                            if (client->isAdmin) {
+                                Client_send_message(c, msg);
+                            }
+#else
+                            Client_send_message(c, msg);
+#endif
+
 							Log_debug("Text message to session ID %d", c->sessionId);
+#if DEBUG_LOG == 1
+                            Log_info_client(c, "Text To channel ADMIN?: %s Client: %s", client->isAdmin ? "yes" : "no", client->username);
+#endif
 						}
 					}
 				}
@@ -617,8 +639,22 @@ void Mh_handle_message(client_t *client, message_t *msg)
 					if (itr->sessionId == msg->payload.textMessage->session[i]) {
 						if (!itr->deaf && !itr->self_deaf) {
 							Msg_inc_ref(msg);
-							Client_send_message(itr, msg);
+
+#if HALFDUPLEX_SERVER == 1
+                            if (itr->isAdmin) {
+                                Client_send_message(itr, msg);
+                            }
+                            if (client->isAdmin) {
+                                Client_send_message(itr, msg);
+                            }
+#else
+                                Client_send_message(itr, msg);
+#endif
+
 							Log_debug("Text message to session ID %d", itr->sessionId);
+#if DEBUG_LOG == 1
+                            Log_info_client(itr, "Text To user ADMIN?: %s Client: %s", client->isAdmin ? "yes" : "no", client->username);
+#endif
 						}
 						break;
 					}
