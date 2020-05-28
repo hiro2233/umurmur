@@ -53,7 +53,7 @@ static uint64_t Timer_now()
   ts.tv_sec = mts.tv_sec;
   ts.tv_nsec = mts.tv_nsec;
 #else
-  clock_gettime(CLOCK_MONOTONIC, &ts);
+  clock_gettime(CLOCK_REALTIME, &ts);
 #endif
   e = ts.tv_sec * 1000000LL;
   e += ts.tv_nsec / 1000LL; //convert to microseconds
