@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<UrusStudio_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="umurmur" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/umurmur" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/umurmur" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-march=pentium4" />
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fPIC" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Linker>
+			<Add option="-static-libstdc++" />
+			<Add option="-static-libgcc" />
+			<Add option="-static" />
+			<Add library="config" />
+			<Add library="ssl" />
+			<Add library="crypto" />
+			<Add library="protobuf-c" />
+			<Add library="z" />
+		</Linker>
+		<Unit filename="src/Mumble.pb-c.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Mumble.pb-c.h" />
+		<Unit filename="src/ban.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/ban.h" />
+		<Unit filename="src/byteorder.h" />
+		<Unit filename="src/channel.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/channel.h" />
+		<Unit filename="src/client.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/client.h" />
+		<Unit filename="src/conf.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/conf.h" />
+		<Unit filename="src/config.h" />
+		<Unit filename="src/crypt.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/crypt.h" />
+		<Unit filename="src/list.h" />
+		<Unit filename="src/log.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/log.h" />
+		<Unit filename="src/main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/memory.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/memory.h" />
+		<Unit filename="src/messagehandler.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/messagehandler.h" />
+		<Unit filename="src/messages.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/messages.h" />
+		<Unit filename="src/pds.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/pds.h" />
+		<Unit filename="src/server.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/server.h" />
+		<Unit filename="src/sharedmemory.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/sharedmemory.h" />
+		<Unit filename="src/sharedmemory_struct.h" />
+		<Unit filename="src/ssl.h" />
+		<Unit filename="src/ssli_openssl.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/timer.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/timer.h" />
+		<Unit filename="src/types.h" />
+		<Unit filename="src/util.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/util.h" />
+		<Unit filename="src/version.h" />
+		<Unit filename="src/voicetarget.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/voicetarget.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</UrusStudio_project_file>
