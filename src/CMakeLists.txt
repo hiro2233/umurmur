@@ -48,6 +48,6 @@ target_link_libraries(${PROJECT_NAME}
                       ${PROTOBUFC_LIBRARIES}
                       ${SSLIMP_LIBRARIES}
                       ${LIBRT}
-                      ${CRYPTO_LIBRARIES})
+                      ${CRYPTO_LIBRARIES} z)
 
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION "bin")

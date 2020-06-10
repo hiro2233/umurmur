@@ -1,7 +1,7 @@
 include(FindPackageHandleStandardArgs)
 
 find_path(LIBCONFIG_INCLUDE_DIR NAMES "libconfig.h" PATHS /usr/pkg /usr/local /usr PATH_SUFFIXES "include")
-find_path(LIBCONFIG_LIB_DIR NAMES "libconfig.so" "libconfig.dylib" PATHS /usr/pkg /usr/local /usr PATH_SUFFIXES "lib" "lib/${CMAKE_LIBRARY_ARCHITECTURE}")
+find_path(LIBCONFIG_LIB_DIR NAMES "libconfig.a" "libconfig.so" "libconfig.dylib" PATHS /usr/pkg /usr/local /usr PATH_SUFFIXES "lib" "lib/${CMAKE_LIBRARY_ARCHITECTURE}")
 
 if(LIBCONFIG_INCLUDE_DIR AND LIBCONFIG_LIB_DIR)
   set(LIBCONFIG_LIBRARIES config)
