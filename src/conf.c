@@ -40,10 +40,10 @@
 
 static config_t configuration;
 
-#define DEFAULT_WELCOME "Welcome to uMurmur!"
+#define DEFAULT_WELCOME "Welcome!"
 #define DEFAULT_MAX_CLIENTS 10
 #define DEFAULT_MAX_BANDWIDTH 48000
-#define DEFAULT_BINDPORT 64738
+#define DEFAULT_BINDPORT 1234
 #define DEFAULT_BAN_LENGTH (60*60)
 #define DEFAULT_OPUS_THRESHOLD 100
 
