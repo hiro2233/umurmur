@@ -1,9 +1,9 @@
 max_bandwidth = 48000;
-welcometext = "Welcome to uMurmur!";
+# welcometext = "Welcome to uMurmur!";
 certificate = "ssl/cert.crt";
 private_key = "ssl/key.key";
 password = "";
-# admin_password = "test";   # Set to enable admin functionality.
+admin_password = "admin";   # Set to enable admin functionality.
 # ban_length = 0;            # Length in seconds for a ban. Default is 0. 0 = forever.
 # enable_ban = false;        # Default is false
 # banfile = "banfile.txt";   # File to save bans to. Default is to not save bans to file.
