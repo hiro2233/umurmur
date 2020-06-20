@@ -32,7 +32,10 @@
 #define CRYPTSTATE_H_34564356
 
 #include "byteorder.h"
+
+#ifndef __URUSSTUDIO__
 #include "config.h"
+#endif
 
 #if defined(USE_POLARSSL)
 

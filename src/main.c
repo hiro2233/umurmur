@@ -54,7 +54,9 @@
 #include "client.h"
 #include "conf.h"
 #include "version.h"
+#ifndef __URUSSTUDIO__
 #include "config.h"
+#endif
 #include "sharedmemory.h"
 #include "ban.h"
 

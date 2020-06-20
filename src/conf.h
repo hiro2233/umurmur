@@ -32,7 +32,12 @@
 #define CONF_H_24564356
 
 #include "messages.h"
+
+#ifndef __URUSSTUDIO__
 #include "config.h"
+#else
+#define DEFAULT_CONFIG "wimic.conf"
+#endif
 
 typedef enum param {
 	CERTIFICATE,

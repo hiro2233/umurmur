@@ -32,7 +32,10 @@
 #ifndef SSL_H_987698
 #define SSL_H_987698
 
+#ifndef __URUSSTUDIO__
 #include "config.h"
+#endif
+
 #include "types.h"
 
 #include <inttypes.h>

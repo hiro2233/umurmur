@@ -31,7 +31,10 @@
 #ifndef CLIENT_H_45786678
 #define CLIENT_H_45786678
 
+#ifndef __URUSSTUDIO__
 #include "config.h"
+#endif
+
 #include <stdint.h>
 #include <unistd.h>             /* close() */
 #include <sys/types.h>
