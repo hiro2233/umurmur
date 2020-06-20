@@ -10,7 +10,11 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release CACHE STRING "The type of build product that should be produced." FORCE)
 endif()
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -static -O3")
+if (MSYS)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -static -O3")
+else ()
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3")
+endif ()
 
 include(SelectTLSBackend)
 include(SelectRTBackend)
