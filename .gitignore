@@ -15,3 +15,9 @@ install-sh
 missing
 src/Makefile.in
 
+debug
+release
+*.gch
+*.layout
+*.depend
+*cscope_file_list
