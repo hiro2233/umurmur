@@ -54,7 +54,8 @@ typedef uint64_t subblock;
 #if defined(BYTE_ORDER_BIG_ENDIAN)
 #define SWAPPED(x) (x)
 #elif defined( __x86_64__)
-#define SWAPPED(x) ({register uint64_t __out, __in = (x); __asm__("bswap %q0" : "=r"(__out) : "0"(__in)); __out;})
+#define SWAP64(x) (__builtin_bswap64(x))
+#define SWAPPED(x) SWAP64(x)
 #else
 #include <byteswap.h>
 #define SWAPPED(x) bswap_64(x)
