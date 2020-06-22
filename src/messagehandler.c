@@ -594,7 +594,6 @@ void Mh_handle_message(client_t *client, message_t *msg)
 
 		if (msg->payload.textMessage->n_channel_id > 0) { /* To channel */
 			int i;
-			channel_t *ch_itr;
 			for (i = 0; i < msg->payload.textMessage->n_channel_id; i++) {
 				ch_itr = NULL;
 				do {
@@ -668,7 +667,7 @@ void Mh_handle_message(client_t *client, message_t *msg)
 	case VoiceTarget:
 	{
 		int i, j, count, targetId = msg->payload.voiceTarget->id;
-		struct _MumbleProto__VoiceTarget__Target *target;
+		struct _MumbleProto__VoiceTarget__Target *vtarget;
 
 		if (!targetId || targetId >= 0x1f)
 			break;
@@ -677,16 +676,16 @@ void Mh_handle_message(client_t *client, message_t *msg)
 		if (!count)
 			break;
 		for (i = 0; i < count; i++) {
-			target = msg->payload.voiceTarget->targets[i];
-			for (j = 0; j < target->n_session; j++)
-				Voicetarget_add_session(client, targetId, target->session[j]);
-			if (target->has_channel_id) {
+			vtarget = msg->payload.voiceTarget->targets[i];
+			for (j = 0; j < vtarget->n_session; j++)
+				Voicetarget_add_session(client, targetId, vtarget->session[j]);
+			if (vtarget->has_channel_id) {
 				bool_t linked = false, children = false;
-				if (target->has_links)
-					linked = target->links;
-				if (target->has_children)
-					children = target->children;
-				Voicetarget_add_channel(client, targetId, target->channel_id, linked, children);
+				if (vtarget->has_links)
+					linked = vtarget->links;
+				if (vtarget->has_children)
+					children = vtarget->children;
+				Voicetarget_add_channel(client, targetId, vtarget->channel_id, linked, children);
 			}
 		}
 		break;
@@ -735,7 +734,7 @@ void Mh_handle_message(client_t *client, message_t *msg)
 	    break;
 	case ChannelState:
 	{
-		channel_t *ch_itr, *parent, *newchan;
+		channel_t *parent, *newchan;
 		int leave_id;
 		/* Don't allow any changes to existing channels */
 		if (msg->payload.channelState->has_channel_id) {
@@ -825,7 +824,7 @@ void Mh_handle_message(client_t *client, message_t *msg)
 
 	case UserStats:
 	{
-		client_t *target = NULL;
+		target = NULL;
 		codec_t *codec_itr = NULL;
 		int i;
 		bool_t details = true;

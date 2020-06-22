@@ -465,7 +465,6 @@ int Client_read(client_t *client)
 		return 0;
 	}
 	if (!client->SSLready) {
-		int rc;
 		rc = SSLi_nonblockaccept(client->ssl, &client->SSLready);
 		if (rc < 0) {
 			Client_free(client);
@@ -957,7 +956,6 @@ int Client_voiceMsg(client_t *client, uint8_t *data, int len)
 		}
 	} else if ((vt = Voicetarget_get_id(client, target)) != NULL) { /* Targeted whisper */
 		int i;
-		channel_t *ch;
 		/* Channels */
 		for (i = 0; i < TARGET_MAX_CHANNELS && vt->channels[i].channel != -1; i++) {
 			buffer[0] = (uint8_t) (type | 1);

@@ -248,8 +248,14 @@ void printhelp()
 	exit(0);
 }
 
+#ifdef __LIB_URUSSTUDIO__
+int server_main_start(int argc, char **argv)
+{
+	optind = 0;
+#else
 int main(int argc, char **argv)
 {
+#endif // __URUSSTUDIO__
 	bool_t nodaemon = false;
 #ifdef POSIX_PRIORITY_SCHEDULING
 	bool_t realtime = false;
@@ -343,14 +349,18 @@ int main(int argc, char **argv)
 		}
 #endif
 
+#ifndef __LIB_URUSSTUDIO__
 		signal(SIGCHLD, SIG_IGN); /* ignore child */
 		signal(SIGTSTP, SIG_IGN); /* ignore tty signals */
 		signal(SIGTTOU, SIG_IGN);
 		signal(SIGTTIN, SIG_IGN);
 		signal(SIGPIPE, SIG_IGN);
+#endif
 		signal(SIGHUP, signal_handler); /* catch hangup signal */
 		signal(SIGTERM, signal_handler); /* catch kill signal */
-
+#ifdef __LIB_URUSSTUDIO__
+		signal(SIGSEGV, signal_handler); /* catch kill signal */
+#endif
 		/* Build system string */
 		if (uname(&utsbuf) == 0) {
 			snprintf(system_string, 64, "%s %s", utsbuf.sysname, utsbuf.machine);
@@ -363,7 +373,15 @@ int main(int argc, char **argv)
 
 		/* Initializing */
 		SSLi_init();
-		Chan_init();
+#ifdef __URUSSTUDIO__
+        static bool chan_ops = false;
+		if (!chan_ops) {
+            chan_ops = true;
+            Chan_init();
+		}
+#else
+        Chan_init();
+#endif
 		Client_init();
 		Ban_init();
 
@@ -381,20 +399,21 @@ int main(int argc, char **argv)
 			Log_reset();
 		}
 
+        Log_reset();
 		Server_run();
-
 #ifdef USE_SHAREDMEMORY_API
     Sharedmemory_deinit();
 #endif
 
 		Ban_deinit();
 		SSLi_deinit();
+
+#ifndef __URUSSTUDIO__
 		Chan_free();
+#endif // __URUSSTUDIO__
 		Log_free();
 		Conf_deinit();
-
 		if (pidfile != NULL)
 			unlink(pidfile);
-
 		return 0;
 	}

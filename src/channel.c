@@ -145,10 +145,12 @@ void Chan_init()
 
 	for (i = 0; ; i++) {
 		if (Conf_getNextChannel(&chdesc, i) < 0) {
-			if (i == 0)
+			if (i == 0) {
 				Log_fatal("No valid channels found in configuration file. Exiting.");
+			}
 			break;
 		}
+
 		if (i == 0) {
 			rootChan = createChannel(0, chdesc.name, chdesc.description);
 			rootChan->noenter = chdesc.noenter;
@@ -156,8 +158,7 @@ void Chan_init()
 			list_add_tail(&rootChan->flatlist_node, &channels);
 			if (strcmp(defaultChannelName, chdesc.name) == 0)
 				defaultChan = rootChan;
-		}
-		else {
+		} else {
 			channel_t *ch, *ch_itr = NULL;
 			ch = Chan_createChannel(chdesc.name, chdesc.description);
 			ch->noenter = chdesc.noenter;
@@ -183,6 +184,7 @@ void Chan_init()
 				Log_info("Adding channel '%s' parent '%s'", ch->name, chdesc.parent);
 			}
 		}
+
 	}
 	if (defaultChan == NULL)
 		defaultChan = rootChan;

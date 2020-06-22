@@ -70,7 +70,6 @@ static int SSL_add_ext(X509 * crt, int nid, char *value) {
 static X509 *SSL_readcert(char *certfile)
 {
 	FILE *fp;
-	X509 *x509;
 
 	/* open the certificate file */
 	fp = fopen(certfile, "r");
@@ -96,7 +95,6 @@ static X509 *SSL_readcert(char *certfile)
 static RSA *SSL_readprivatekey(char *keyfile)
 {
 	FILE *fp;
-	RSA *rsa;
 
 /* open the private key file for reading */
 	fp = fopen(keyfile, "r");
@@ -122,7 +120,7 @@ static RSA *SSL_readprivatekey(char *keyfile)
 	return rsa;
 }
 
-static void SSL_writecert(char *certfile, X509 *x509)
+static void SSL_writecert(char *certfile, X509 *x509c)
 {
 	FILE *fp;
 
@@ -132,13 +130,13 @@ static void SSL_writecert(char *certfile, X509 *x509)
 		Log_warn("Unable to open the X509 file %s for writing", certfile);
 		return;
 	}
-	if (PEM_write_X509(fp, x509) == 0) {
+	if (PEM_write_X509(fp, x509c) == 0) {
 		Log_warn("Error trying to write X509 info.");
 	}
 	fclose(fp);
 }
 
-static void SSL_writekey(char *keyfile, RSA *rsa)
+static void SSL_writekey(char *keyfile, RSA *rsak)
 {
 	FILE *fp;
 
@@ -149,7 +147,7 @@ static void SSL_writekey(char *keyfile, RSA *rsa)
 		return;
 	}
 
-	if (PEM_write_RSAPrivateKey(fp, rsa, NULL, NULL, 0, NULL, NULL) == 0) {
+	if (PEM_write_RSAPrivateKey(fp, rsak, NULL, NULL, 0, NULL, NULL) == 0) {
 		Log_warn("Error trying to write private key");
 	}
 	fclose(fp);
@@ -290,7 +288,9 @@ void SSLi_init(void)
 void SSLi_deinit(void)
 {
 	SSL_CTX_free(context);
+#ifndef __URUSSTUDIO__
 	EVP_cleanup();
+#endif
 }
 
 int SSLi_nonblockaccept(SSL_handle_t *ssl, bool_t *SSLready)
@@ -328,7 +328,6 @@ SSL_handle_t *SSLi_newconnection(int *fd, bool_t *SSLready)
 /* Create SHA1 of last certificate in the peer's chain. */
 bool_t SSLi_getSHA1Hash(SSL_handle_t *ssl, uint8_t *hash)
 {
-	X509 *x509;
 	uint8_t *buf, *p;
 	int len;
 

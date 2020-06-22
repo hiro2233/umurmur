@@ -135,6 +135,7 @@ struct sockaddr_storage** Server_setupAddressesAndPorts()
 void Server_runLoop(struct pollfd* pollfds)
 {
 	int timeout, rc, clientcount;
+	shutdown_server = false;
 
 	etimer_t janitorTimer;
 	Timer_init(&janitorTimer);
@@ -221,7 +222,7 @@ void Server_setupTCPSockets(struct sockaddr_storage* addresses[2], struct pollfd
 			Log_fatal("setsockopt IPv4: %s", strerror(errno));
 		if (bind(sockets[0], (struct sockaddr *)addresses[0], sizeof (struct sockaddr_in)) < 0) {
 			char *addressString = Util_addressToString(addresses[0]);
-			Log_fatal("bind %s %d: %s", addressString, Util_addressToPort(addresses[0]), strerror(errno));
+			Log_fatal("bind TCP IPv4 %s %d: %s", addressString, Util_addressToPort(addresses[0]), strerror(errno));
 			free(addressString);
 		}
 		if (listen(sockets[0], 3) < 0)
@@ -243,7 +244,7 @@ void Server_setupTCPSockets(struct sockaddr_storage* addresses[2], struct pollfd
 			Log_fatal("setsockopt IPv6: %s", strerror(errno));
 		if (bind(sockets[1], (struct sockaddr *)addresses[1], sizeof (struct sockaddr_in6)) < 0) {
 			char *addressString = Util_addressToString(addresses[1]);
-			Log_fatal("bind %s %d: %s", addressString, Util_addressToPort(addresses[1]), strerror(errno));
+			Log_fatal("bind TCP IPv6 %s %d: %s", addressString, Util_addressToPort(addresses[1]), strerror(errno));
 			free(addressString);
 		}
 		if (listen(sockets[1], 3) < 0)
@@ -268,7 +269,7 @@ void Server_setupUDPSockets(struct sockaddr_storage* addresses[2], struct pollfd
 		sockets[0] = socket(PF_INET, SOCK_DGRAM, 0);
 		if (bind(sockets[0], (struct sockaddr *) addresses[0], sizeof (struct sockaddr_in)) < 0) {
 			char *addressString = Util_addressToString(addresses[0]);
-			Log_fatal("bind %s %d: %s", addressString, Util_addressToPort(addresses[0]), strerror(errno));
+			Log_fatal("bind UDP IPv4 %s %d: %s", addressString, Util_addressToPort(addresses[0]), strerror(errno));
 			free(addressString);
 		}
 		val = 0xe0;
@@ -290,7 +291,7 @@ void Server_setupUDPSockets(struct sockaddr_storage* addresses[2], struct pollfd
 			Log_fatal("setsockopt IPv6: %s", strerror(errno));
 		if (bind(sockets[1], (struct sockaddr *) addresses[1], sizeof (struct sockaddr_in6)) < 0) {
 			char *addressString = Util_addressToString(addresses[1]);
-			Log_fatal("bind %s %d: %s", addressString, Util_addressToPort(addresses[1]), strerror(errno));
+			Log_fatal("bind UDP IPv6 %s %d: %s", addressString, Util_addressToPort(addresses[1]), strerror(errno));
 			free(addressString);
 		}
 		val = 0xe0;
@@ -335,11 +336,17 @@ void Server_run()
 
 	/* Disconnect clients and cleanup memory */
 	Client_disconnect_all();
+	close(pollfds[0].fd);
+	close(pollfds[1].fd);
+	close(udpsocks[0]);
+	close(udpsocks[1]);
 	free(pollfds);
 	free(addresses[0]);
 	free(addresses[1]);
 	free(addresses);
 	free(udpsocks);
+	printf("umurmur disconnect.\n");
+	sleep(1);
 }
 
 void Server_shutdown()
