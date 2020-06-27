@@ -52,6 +52,7 @@
 
 /* globals */
 bool_t shutdown_server;
+bool_t server_running;
 extern char *bindaddr;
 extern char *bindaddr6;
 extern int bindport;
@@ -136,6 +137,7 @@ void Server_runLoop(struct pollfd* pollfds)
 {
 	int timeout, rc, clientcount;
 	shutdown_server = false;
+	server_running = false;
 
 	etimer_t janitorTimer;
 	Timer_init(&janitorTimer);
@@ -161,6 +163,9 @@ void Server_runLoop(struct pollfd* pollfds)
 			timeout = (int)(1000000LL - (int64_t)Timer_elapsed(&janitorTimer)) / 1000LL;
 		}
 		rc = poll(pollfds, clientcount + nofServerSocks, timeout);
+
+		server_running = true;
+
 		if (rc == 0) {
 			/* Poll timed out, do maintenance */
 			Timer_restart(&janitorTimer);
@@ -206,6 +211,8 @@ void Server_runLoop(struct pollfd* pollfds)
     Sharedmemory_update();
 #endif
 	}
+
+	server_running = false;
 }
 
 void Server_setupTCPSockets(struct sockaddr_storage* addresses[2], struct pollfd* pollfds)
@@ -353,3 +360,10 @@ void Server_shutdown()
 {
 	shutdown_server = true;
 }
+
+#ifdef __LIB_URUSSTUDIO__
+bool server_is_running()
+{
+    return server_running;
+}
+#endif
