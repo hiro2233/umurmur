@@ -373,7 +373,7 @@ int main(int argc, char **argv)
 
 		/* Initializing */
 		SSLi_init();
-#ifdef __URUSSTUDIO__
+#ifdef __LIB_URUSSTUDIO__
         static bool chan_ops = false;
 		if (!chan_ops) {
             chan_ops = true;
@@ -408,12 +408,12 @@ int main(int argc, char **argv)
 		Ban_deinit();
 		SSLi_deinit();
 
-#ifndef __URUSSTUDIO__
+#ifndef __LIB_URUSSTUDIO__
 		Chan_free();
-#endif // __URUSSTUDIO__
+#endif // __LIB_URUSSTUDIO__
 		Log_free();
 		Conf_deinit();
 		if (pidfile != NULL)
 			unlink(pidfile);
 		return 0;
-	}
+}
