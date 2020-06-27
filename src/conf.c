@@ -40,12 +40,30 @@
 
 static config_t configuration;
 
+#ifndef DEFAULT_KEY_PATH
+#define DEFAULT_KEY_PATH "/etc/umurmur/private_key.key"
+#endif
+#ifndef DEFAULT_CERT_PATH
+#define DEFAULT_CERT_PATH "/etc/umurmur/certificate.crt"
+#endif
+#ifndef DEFAULT_PASSPHRASE
+#define DEFAULT_PASSPHRASE ""
+#endif
+#ifndef DEFAULT_ADMINPASSPHRASE
+#define DEFAULT_ADMINPASSPHRASE ""
+#endif
+#ifndef DEFAULT_DEF_CHANNEL
+#define DEFAULT_DEF_CHANNEL ""
+#endif
 #define DEFAULT_WELCOME "Welcome!"
 #define DEFAULT_MAX_CLIENTS 10
 #define DEFAULT_MAX_BANDWIDTH 48000
 #define DEFAULT_BINDPORT 1234
 #define DEFAULT_BAN_LENGTH (60*60)
 #define DEFAULT_OPUS_THRESHOLD 100
+
+#define STRINGIZEDEF(x) #x
+#define STRINGIZEDEF_VAL(x) STRINGIZEDEF(x)
 
 const char defaultconfig[] = DEFAULT_CONFIG;
 
@@ -89,23 +107,23 @@ const char *getStrConf(param_t param)
 		case CERTIFICATE:
 			setting = config_lookup(&configuration, "certificate");
 			if (!setting)
-				return "/etc/umurmur/certificate.crt";
+				return STRINGIZEDEF_VAL(DEFAULT_CERT_PATH);
 			else {
 				if ((strsetting = config_setting_get_string(setting)) != NULL)
 					return strsetting;
 				else
-					return "/etc/umurmur/certificate.crt";
+					return STRINGIZEDEF_VAL(DEFAULT_CERT_PATH);
 			}
 			break;
 		case KEY:
 			setting = config_lookup(&configuration, "private_key");
 			if (!setting)
-				return "/etc/umurmur/private_key.key";
+				return STRINGIZEDEF_VAL(DEFAULT_KEY_PATH);
 			else {
 				if ((strsetting = config_setting_get_string(setting)) != NULL)
 					return strsetting;
 				else
-					return "/etc/umurmur/private_key.key";
+					return STRINGIZEDEF_VAL(DEFAULT_KEY_PATH);
 			}
 			break;
 		case CAPATH:
@@ -122,23 +140,23 @@ const char *getStrConf(param_t param)
 		case PASSPHRASE:
 			setting = config_lookup(&configuration, "password");
 			if (!setting)
-				return "";
+				return STRINGIZEDEF_VAL(DEFAULT_PASSPHRASE);
 			else {
 				if ((strsetting = config_setting_get_string(setting)) != NULL)
 					return strsetting;
 				else
-					return "";
+					return STRINGIZEDEF_VAL(DEFAULT_PASSPHRASE);
 			}
 			break;
 		case ADMIN_PASSPHRASE:
 			setting = config_lookup(&configuration, "admin_password");
 			if (!setting)
-				return "";
+				return STRINGIZEDEF_VAL(DEFAULT_ADMINPASSPHRASE);
 			else {
 				if ((strsetting = config_setting_get_string(setting)) != NULL)
 					return strsetting;
 				else
-					return "";
+					return STRINGIZEDEF_VAL(DEFAULT_ADMINPASSPHRASE);
 			}
 			break;
 		case BINDADDR:
@@ -411,3 +429,18 @@ int Conf_getNextChannelLink(conf_channel_link_t *chlink, int index)
 
 	return 0;
 }
+
+#ifdef __LIB_URUSSTUDIO__
+char *get_default_certkey_path()
+{
+    static char dir[] = STRINGIZEDEF_VAL(DEFAULT_CERT_PATH);
+    static char *tmpdir = 0;
+
+    if (tmpdir == 0) {
+        tmpdir = malloc(50);
+    }
+
+    tmpdir = strtok(dir, "/");
+    return tmpdir;
+}
+#endif
