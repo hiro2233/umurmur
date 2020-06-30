@@ -41,10 +41,10 @@
 static config_t configuration;
 
 #ifndef DEFAULT_KEY_PATH
-#define DEFAULT_KEY_PATH "/etc/umurmur/private_key.key"
+#define DEFAULT_KEY_PATH /etc/umurmur/private_key.key
 #endif
 #ifndef DEFAULT_CERT_PATH
-#define DEFAULT_CERT_PATH "/etc/umurmur/certificate.crt"
+#define DEFAULT_CERT_PATH /etc/umurmur/certificate.crt
 #endif
 #ifndef DEFAULT_PASSPHRASE
 #define DEFAULT_PASSPHRASE ""
@@ -195,12 +195,12 @@ const char *getStrConf(param_t param)
 		case DEFAULT_CHANNEL:
 			setting = config_lookup(&configuration, "default_channel");
 			if (!setting)
-				return "";
+				return STRINGIZEDEF_VAL(DEFAULT_DEF_CHANNEL);
 			else {
 				if ((strsetting = config_setting_get_string(setting)) != NULL)
 					return strsetting;
 				else
-					return "";
+					return STRINGIZEDEF_VAL(DEFAULT_DEF_CHANNEL);;
 			}
 			break;
 		case USERNAME:

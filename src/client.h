@@ -61,7 +61,9 @@
 #define KEY_LENGTH sizeof(uint16_t) + 4 * sizeof(in_addr_t)
 
 #define DEBUG_LOG 0
+#ifndef HALFDUPLEX_SERVER
 #define HALFDUPLEX_SERVER 0
+#endif // HALFDUPLEX_SERVER
 
 #define IS_AUTH(_a_) ((_a_)->authenticated)
 

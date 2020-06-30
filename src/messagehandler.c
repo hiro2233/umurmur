@@ -608,10 +608,7 @@ void Mh_handle_message(client_t *client, message_t *msg)
 							Msg_inc_ref(msg);
 
 #if HALFDUPLEX_SERVER == 1
-                            if (c->isAdmin) {
-                                Client_send_message(c, msg);
-                            }
-                            if (client->isAdmin) {
+                            if (c->isAdmin || client->isAdmin) {
                                 Client_send_message(c, msg);
                             }
 #else
@@ -640,10 +637,7 @@ void Mh_handle_message(client_t *client, message_t *msg)
 							Msg_inc_ref(msg);
 
 #if HALFDUPLEX_SERVER == 1
-                            if (itr->isAdmin) {
-                                Client_send_message(itr, msg);
-                            }
-                            if (client->isAdmin) {
+                            if (itr->isAdmin || client->isAdmin) {
                                 Client_send_message(itr, msg);
                             }
 #else

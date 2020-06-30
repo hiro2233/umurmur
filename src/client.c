@@ -940,10 +940,7 @@ int Client_voiceMsg(client_t *client, uint8_t *data, int len)
 			c = list_get_entry(itr, client_t, chan_node);
 
 #if HALFDUPLEX_SERVER == 1
-            if (c->isAdmin) {
-                Client_send_voice(client, c, buffer, pds->offset + 1, poslen);
-            }
-            if (client->isAdmin) {
+            if (c->isAdmin || client->isAdmin) {
                 Client_send_voice(client, c, buffer, pds->offset + 1, poslen);
             }
 #else
