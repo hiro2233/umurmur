@@ -171,11 +171,12 @@
 			<Add option="-Wno-sign-compare" />
 			<Add option="-Wno-old-style-declaration" />
 			<Add option="-D__URUSSTUDIO__" />
-			<Add option="-DDEFAULT_KEY_PATH=ssl/cert.crt" />
-			<Add option="-DDEFAULT_CERT_PATH=ssl/key.key" />
+			<Add option="-DDEFAULT_KEY_PATH=ssl/key.key" />
+			<Add option="-DDEFAULT_CERT_PATH=ssl/cert.crt" />
 			<Add option="-DDEFAULT_PASSPHRASE=1234" />
 			<Add option="-DDEFAULT_ADMINPASSPHRASE=admin" />
 			<Add option="-DDEFAULT_DEF_CHANNEL=WiMic" />
+			<Add option="-DHALFDUPLEX_SERVER=1" />
 		</Compiler>
 		<Linker>
 			<Add library="config" />
