@@ -62,9 +62,6 @@ static config_t configuration;
 #define DEFAULT_BAN_LENGTH (60*60)
 #define DEFAULT_OPUS_THRESHOLD 100
 
-#define STRINGIZEDEF(x) #x
-#define STRINGIZEDEF_VAL(x) STRINGIZEDEF(x)
-
 const char defaultconfig[] = DEFAULT_CONFIG;
 
 void Conf_init(const char *conffile)
