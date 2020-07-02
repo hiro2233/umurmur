@@ -39,6 +39,9 @@
 #define DEFAULT_CONFIG "wimic.conf"
 #endif
 
+#define STRINGIZEDEF(x) #x
+#define STRINGIZEDEF_VAL(x) STRINGIZEDEF(x)
+
 typedef enum param {
 	CERTIFICATE,
 	KEY,
