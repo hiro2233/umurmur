@@ -862,7 +862,7 @@ int Client_read_udp(int udpsock)
 			break;
 		default:
 			clientAddressString = Util_clientAddressToString(itr);
-			Log_debug("Unknown UDP message type from %s port %d", clientAddressString, fromport);
+			Log_debug("Unknown UDP message type from %s port %d msgType: %d len %d", clientAddressString, fromport, msgType, len);
 			free(clientAddressString);
 			break;
 	}
@@ -1003,19 +1003,15 @@ int Client_voiceMsg(client_t *client, uint8_t *data, int len)
 			}
 		}
 		/* Sessions */
-		for (i = 0; i < TARGET_MAX_SESSIONS && vt->sessions[i] != -1; i++) {
+		list_iterate(itr, &ch->clients) {
 			client_t *c;
-			buffer[0] = (uint8_t) (type | 2);
-			Log_debug("Whisper session %d", vt->sessions[i]);
-#if DEBUG_LOG == 1
-            Log_info_client(client, "Whisper session: %s", client->isAdmin ? "yes" : "no");
-#endif
-			while (Client_iterate(&c) != NULL) {
-				if (c->sessionId == vt->sessions[i]) {
-					Client_send_voice(client, c, buffer, pds->offset + 1, poslen);
-					break;
-				}
-			}
+			c = list_get_entry(itr, client_t, chan_node);
+            for (i = 0; i < TARGET_MAX_SESSIONS && vt->sessions[i] != -1; i++) {
+                buffer[0] = (uint8_t) (type | 2);
+                if (c->sessionId == vt->sessions[i]) {
+                    Client_send_voice(client, c, buffer, pds->offset + 1, poslen);
+                }
+            }
 		}
 	}
 out:

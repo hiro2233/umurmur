@@ -456,8 +456,8 @@ void Mh_handle_message(client_t *client, message_t *msg)
 			}
 		}
 
-		if (msg->payload.userState->has_user_id || msg->payload.userState->has_suppress ||
-		    msg->payload.userState->has_priority_speaker || msg->payload.userState->has_texture) {
+		if (msg->payload.userState->has_user_id || msg->payload.userState->has_priority_speaker ||
+            msg->payload.userState->has_texture) {
 			sendPermissionDenied(client, "Not supported by uMurmur");
 			break;
 		}
