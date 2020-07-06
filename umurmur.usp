@@ -124,6 +124,12 @@
 				<Option parameters="-r -d -b 1234 -c umurmur.conf.example" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-Wno-sign-compare" />
+					<Add option="-Wno-old-style-declaration" />
+					<Add option="-Wno-cast-align" />
+					<Add option="-Wno-discarded-qualifiers" />
+					<Add option="-Wno-unused-variable" />
+					<Add option="-Wno-pointer-sign" />
 					<Add option="-D__LIB_URUSSTUDIO__" />
 				</Compiler>
 				<Linker>
@@ -167,9 +173,6 @@
 			<Add option="-Werror=parentheses" />
 			<Add option="-Werror=ignored-qualifiers" />
 			<Add option="-Werror=narrowing" />
-			<Add option="-msse" />
-			<Add option="-Wno-sign-compare" />
-			<Add option="-Wno-old-style-declaration" />
 			<Add option="-D__URUSSTUDIO__" />
 			<Add option="-DDEFAULT_KEY_PATH=ssl/key.key" />
 			<Add option="-DDEFAULT_CERT_PATH=ssl/cert.crt" />
