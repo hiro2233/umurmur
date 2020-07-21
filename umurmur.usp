@@ -173,6 +173,7 @@
 			<Add option="-Werror=parentheses" />
 			<Add option="-Werror=ignored-qualifiers" />
 			<Add option="-Werror=narrowing" />
+			<Add option="-funroll-loops" />
 			<Add option="-D__URUSSTUDIO__" />
 			<Add option="-DDEFAULT_KEY_PATH=ssl/key.key" />
 			<Add option="-DDEFAULT_CERT_PATH=ssl/cert.crt" />
