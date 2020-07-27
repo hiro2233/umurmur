@@ -175,8 +175,8 @@
 			<Add option="-Werror=narrowing" />
 			<Add option="-funroll-loops" />
 			<Add option="-D__URUSSTUDIO__" />
-			<Add option="-DDEFAULT_KEY_PATH=ssl/key.key" />
-			<Add option="-DDEFAULT_CERT_PATH=ssl/cert.crt" />
+			<Add option='-DDEFAULT_KEY_PATH=&quot;ssl/key.key&quot;' />
+			<Add option='-DDEFAULT_CERT_PATH=&quot;ssl/cert.crt&quot;' />
 			<Add option="-DDEFAULT_PASSPHRASE=1234" />
 			<Add option="-DDEFAULT_ADMINPASSPHRASE=admin" />
 			<Add option="-DDEFAULT_DEF_CHANNEL=WiMic" />
