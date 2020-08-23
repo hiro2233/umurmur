@@ -58,7 +58,7 @@ extern char *bindaddr6;
 extern int bindport;
 extern int bindport6;
 int* udpsocks;
-bool_t hasv4 = true, hasv6 = true;
+bool_t hasv4 = true, hasv6 = false;
 
 const int on = 1;
 int nofServerSocks = 4;
@@ -72,9 +72,11 @@ void checkIPversions()
 	hasv4 = (errno == EAFNOSUPPORT || errno == EPROTONOSUPPORT) ? false : true;
 	if (!(testsocket < 0)) close(testsocket);
 
-	testsocket = socket(PF_INET6, SOCK_STREAM, 0);
-	hasv6 = (errno == EAFNOSUPPORT || errno == EPROTONOSUPPORT) ? false : true;
-	if (!(testsocket < 0)) close(testsocket);
+	if (hasv6) {
+        testsocket = socket(PF_INET6, SOCK_STREAM, 0);
+        hasv6 = (errno == EAFNOSUPPORT || errno == EPROTONOSUPPORT) ? false : true;
+        if (!(testsocket < 0)) close(testsocket);
+	}
 
 	if(!hasv4)
 	{
