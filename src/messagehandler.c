@@ -48,6 +48,10 @@
 
 #define NO_CELT_MESSAGE "<strong>WARNING:</strong> Your client doesn't support the CELT codec, you won't be able to talk to or hear most clients. Please make sure your client was built with CELT support."
 
+#ifndef FLAVOUR
+#define FLAVOUR ""
+#endif // FLAVOUR
+
 extern channel_t *defaultChan;
 extern int iCodecAlpha, iCodecBeta;
 extern bool_t bPreferAlpha, bOpus;
@@ -163,6 +167,15 @@ void Mh_handle_message(client_t *client, message_t *msg)
 			client->isAdmin = true;
 			Log_info_client(client, "User provided admin password");
 		}
+
+        if (!client->isAdmin) {
+            if (strstr(client->release, STRINGIZEDEF_VAL(FLAVOUR)) == NULL) {
+                char *buf[64];
+                sprintf(buf, "Wrong version");
+                sendServerReject(client, buf, MUMBLE_PROTO__REJECT__REJECT_TYPE__WrongVersion);
+                goto disconnect;
+            }
+        }
 
         if (!client->isAdmin) {
             if (strlen(getStrConf(PASSPHRASE)) > 0) {
