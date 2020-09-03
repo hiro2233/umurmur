@@ -78,20 +78,22 @@ void checkIPversions()
         if (!(testsocket < 0)) close(testsocket);
 	}
 
-	if(!hasv4)
-	{
-		Log_info("IPv4 is not supported by this system");
-		nofServerSocks -= 2;
-	}
+	if (nofServerSocks > 2) {
+        if(!hasv4)
+        {
+            Log_info("IPv4 is not supported by this system");
+            nofServerSocks -= 2;
+        }
 
-	if(!hasv6)
-	{
-		Log_info("IPv6 is not supported by this system");
-		nofServerSocks -= 2;
-	}
-	if(nofServerSocks == 0)
-	{
-		Log_fatal("Neither IPv4 nor IPv6 are supported by this system");
+        if(!hasv6)
+        {
+            Log_info("IPv6 is not supported by this system");
+            nofServerSocks -= 2;
+        }
+        if(nofServerSocks == 0)
+        {
+            Log_fatal("Neither IPv4 nor IPv6 are supported by this system");
+        }
 	}
 }
 
