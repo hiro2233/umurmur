@@ -111,6 +111,7 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add option="-Wl,--gc-sections" />
 					<Add library="rt" />
 				</Linker>
 			</Target>
@@ -134,6 +135,7 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add option="-Wl,--gc-sections" />
 					<Add library="rt" />
 				</Linker>
 			</Target>
@@ -153,12 +155,17 @@
 				</Linker>
 			</Target>
 		</Build>
+		<VirtualTargets>
+			<Add alias="Debug_unix_wimic" targets="Debuglib_unix;" />
+			<Add alias="Release_unix_wimic" targets="Releaselib_unix;" />
+		</VirtualTargets>
 		<Compiler>
 			<Add option="-Wshadow" />
 			<Add option="-Wcast-align" />
 			<Add option="-Wundef" />
 			<Add option="-Wextra" />
 			<Add option="-Wall" />
+			<Add option="-std=gnu++11" />
 			<Add option="-fno-exceptions" />
 			<Add option="-ffunction-sections" />
 			<Add option="-fdata-sections" />
@@ -168,7 +175,6 @@
 			<Add option="-Wno-redundant-decls" />
 			<Add option="-Wno-unknown-pragmas" />
 			<Add option="-Wno-trigraphs" />
-			<Add option="-std=gnu++11" />
 			<Add option="-Werror=return-type" />
 			<Add option="-Werror=parentheses" />
 			<Add option="-Werror=ignored-qualifiers" />
@@ -269,9 +275,6 @@
 		</Unit>
 		<Unit filename="src/voicetarget.h" />
 		<Extensions>
-			<code_completion />
-			<envvars />
-			<debugger />
 			<lib_finder disable_auto="1" />
 		</Extensions>
 	</Project>
